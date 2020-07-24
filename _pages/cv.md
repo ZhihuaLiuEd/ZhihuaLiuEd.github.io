@@ -11,21 +11,20 @@ redirect_from:
 
 Education
 ======
-* B.S. in GitHub, GitHub University, 2012
-* M.S. in Jekyll, GitHub University, 2014
-* Ph.D in Version Control Theory, GitHub University, 2018 (expected)
+* B.Eng. in Internet of Things, University of Science and Technology Beijing, 2015
+* M.Sc. in Artificial Intelligence, The University of Edinburgh, 2016
+* MPhil, Ph.D in Computer Science, University of Leicester, 2018-2022 (expected)
 
 Work experience
 ======
-* Summer 2015: Research Assistant
-  * Github University
-  * Duties included: Tagging issues
-  * Supervisor: Professor Git
+* 2016-2018: Software Engineer
+  * JD Logistics, JD.com
+  * Duties included: Computer vision research on 3D point cloud processing and storage.
+  * Supervisor: Guiwang He, Yanli Lee, Jinhua Cai
 
-* Fall 2015: Research Assistant
-  * Github University
-  * Duties included: Merging pull requests
-  * Supervisor: Professor Hub
+* Summer 2020: Research Assistant
+  * University of Leicester & Astrosat
+  * Duties included: Automated building detection and construction grade classification from satellite images
   
 Skills
 ======
