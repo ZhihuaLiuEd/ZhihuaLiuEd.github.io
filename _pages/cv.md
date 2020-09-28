@@ -20,7 +20,7 @@ Work experience
 * 2016-2018: Software Engineer
   * JD Logistics, JD.com
   * Duties included: Computer vision research on 3D point cloud processing and storage.
-  * Supervisor: Guiwang He, Yanli Lee, Jinhua Cai
+
 
 * Summer 2020: Research Assistant
   * University of Leicester & Astrosat
