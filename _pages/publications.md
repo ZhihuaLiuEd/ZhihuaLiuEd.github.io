@@ -4,11 +4,10 @@ title: "Publications"
 author_profile: true
 redirect_from: 
   - /publications.html
-  
-
 ---
 
-  <!-- You can also find my publications on <a href="https://scholar.google.co.uk/citations?user=je2KXVYAAAAJ&hl=en">my Google Scholar profile</a>. -->
+
+<!-- You can also find my publications on <a href="https://scholar.google.co.uk/citations?user=je2KXVYAAAAJ&hl=en">my Google Scholar profile</a>. -->
 
 
 ## Papers
