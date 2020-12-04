@@ -1,17 +1,15 @@
 ---
-permalink: /publications/
-title: "Publications"
+permalink: /teaching/
+title: "Teaching"
 author_profile: true
 redirect_from: 
-  - /publications.html
+  - /teaching.html
   
 
 ---
 
-  <!-- You can also find my publications on <a href="https://scholar.google.co.uk/citations?user=je2KXVYAAAAJ&hl=en">my Google Scholar profile</a>. -->
 
-
-## Papers
+## 2020
 
 ### Preprint
 
