@@ -1,11 +1,10 @@
 ---
-title: 'Future Blog Post'
-date: 2199-01-01
-permalink: /posts/2012/08/blog-post-4/
+title: 'Sparse Gaussian Process Approximation'
+date: 2020-12-05
+permalink: /posts/2020/12/ML/
 tags:
-  - cool posts
-  - category1
-  - category2
+  - Machine Learning
+  - Lecture Notes
 ---
 
-This post will show up by default. To disable scheduling of future posts, edit `config.yml` and set `future: false`. 
+I will come back shortly for the Sparse Gaussian Process Approximation based on Dr. Richard E. Turner's lecture [video](https://www.youtube.com/watch?v=sQmsQq_Jfi8&list=WL&index=54)/[slides](http://gpss.cc/gpss17/slides/gp-approx-new.pdf) on Gaussian Process Summer School 2017.

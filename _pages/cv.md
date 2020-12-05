@@ -13,46 +13,31 @@ Education
 ======
 * B.Eng. in Internet of Things, University of Science and Technology Beijing, 2015
 * M.Sc. in Artificial Intelligence, The University of Edinburgh, 2016
-* MPhil, Ph.D in Computer Science, University of Leicester, 2018-2022 (expected)
+* MPhil, Ph.D in Computer Science, University of Leicester, 2018-2023 (expected)
 
 Work experience
 ======
-* 2016-2018: Software Engineer
+* 2016-2018: Algorithm Engineer
   * JD Logistics, JD.com
-  * Duties included: Computer vision research on 3D point cloud processing and storage.
 
-
-* Summer 2020: Research Assistant
+* 2020 Summer: Research Assistant
   * University of Leicester & Astrosat
-  * Duties included: Automated building detection and construction grade classification from satellite images
+
   
 Skills
 ======
-* Skill 1
-* Skill 2
-  * Sub-skill 2.1
-  * Sub-skill 2.2
-  * Sub-skill 2.3
-* Skill 3
-
-Publications
-======
-  <ul>{% for post in site.publications %}
-    {% include archive-single-cv.html %}
-  {% endfor %}</ul>
+* Programming Language
+  * Python, C/C++, CUDA, MATLAB, JAVA, SQL
+* Frameworks
+  * PyTorch, Tensorflow/Keras, OpenCV, Point Cloud Library, Git
+* Language
+  * Mandarin, English
   
-Talks
+Professional Service
 ======
-  <ul>{% for post in site.talks %}
-    {% include archive-single-talk-cv.html %}
-  {% endfor %}</ul>
-  
-Teaching
-======
-  <ul>{% for post in site.teaching %}
-    {% include archive-single-cv.html %}
-  {% endfor %}</ul>
-  
-Service and leadership
-======
-* Currently signed in to 43 different slack teams
+* Reviewer of:
+  * Conference: ICRA2019, ICRA2020, BMVC2019, BMVC2020, CVPR2020, CVPR2021, ACCV2020, WACV2021
+  * Journals: IEEE Access, IEEE Transaction on Human-Machine System, EURASIP Journal on Advances in Signal Processing, Signal Processing: Image Communication, Computers in Biology and Medicine, BioMed Research International.
+* Workshop Organizer:
+  * 1st Workshop for Sino-UK to Promote the Development and Application of Artificial Intelligence (Leicester, 12th Jun 2019,)
+  * Winter Seminar on Data Science (Leicester, 11th Dec 2019)
