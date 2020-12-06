@@ -33,6 +33,7 @@ Skills
 * Language
   * Mandarin, English
   
+<!---  
 Professional Service
 ======
 * Reviewer of:
@@ -41,3 +42,4 @@ Professional Service
 * Workshop Organizer:
   * 1st Workshop for Sino-UK to Promote the Development and Application of Artificial Intelligence (Leicester, 12th Jun 2019,)
   * Winter Seminar on Data Science (Leicester, 11th Dec 2019)
+-->
