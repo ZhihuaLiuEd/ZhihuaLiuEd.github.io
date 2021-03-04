@@ -14,6 +14,10 @@ redirect_from:
 
 ### Preprint
 
+1. **Structured Context Enhancement Network for Mouse Pose Estimation** [<a href='https://arxiv.org/pdf/2012.00630.pdf'>PDF</a>] <br>
+Feixiang Zhou, Zheheng Jiang, <ins>**Zhihua Liu**</ins>, Fang Chen, Long Chen, Lei Tong, Zhile Yang, Haikuan Wang, Minrui Fei, Ling Li, Huiyu Zhou<br>
+arXiv:2012.00630<br>
+
 1. **Deep Learning Based Brain Tumor Segmentation: A Survey** [<a href='https://arxiv.org/pdf/2007.09479.pdf'>PDF</a>] <br>
 <ins>**Zhihua Liu**</ins>,Long Chen, Lei Tong, Feixiang Zhou, Zheheng Jiang, Qianni Zhang, Caifeng Shan, Yinhai Wang, Xiangrong Zhang, Ling Li, Huiyu Zhou<br>
 arXiv:2007.09479 <br>
