@@ -22,10 +22,6 @@ arXiv:2012.00630<br>
 <ins>**Zhihua Liu**</ins>,Long Chen, Lei Tong, Feixiang Zhou, Zheheng Jiang, Qianni Zhang, Caifeng Shan, Yinhai Wang, Xiangrong Zhang, Ling Li, Huiyu Zhou<br>
 arXiv:2007.09479 <br>
 
-1. **CANet: Context Aware Network for 3D Brain Tumor Segmentation** [<a href='https://arxiv.org/pdf/2007.07788.pdf'>PDF</a>] [<a href='https://github.com/ZhihuaLiuEd/canetbrats'>Code</a>]<br>
-<ins>**Zhihua Liu**</ins>,Lei Tong, Long Chen, Feixiang Zhou, Zheheng Jiang, Qianni Zhang, Yinhai Wang, Caifeng Shan, Ling Li, Huiyu Zhou<br>
-arXiv:2007.07788 <br>
-
 1. **Detection and Tracking of Multiple Mice Using Part Proposal Networks** [<a href='https://arxiv.org/pdf/1906.02831.pdf'>PDF</a>] <br>
 Zheheng Jiang, <ins>**Zhihua Liu**</ins>, Long Chen, Lei Tong, Xiangrong Zhang, Xiangyuan Lan, Danny Crookes, Ming-Hsuan Yang, Huiyu Zhou <br>
 arXiv:1906.02831 <br>
@@ -36,16 +32,16 @@ arXiv:1906.00398 <br>
 
 ### Conference
 
-#### 2020
-
 1. **Underwater object detection using Invert Multi-Class Adaboost with deep learning** [<a href='https://arxiv.org/pdf/2005.11552.pdf'>PDF</a>] [<a href='https://github.com/LongChenCV/SWIPENet'>Code</a>]<br>
 Long Chen, <ins>**Zhihua Liu**</ins>, Lei Tong, Zheheng Jiang, Shengke Wang, Junyu Dong, Huiyu Zhou<br>
 **IJCNN'20**: Proceedings of the 2020 International Joint Conference on Neural Networks.<br>
 
 ### Journal
 
-#### 2020
+1. **CANet: Context Aware Network for 3D Brain Tumor Segmentation** [<a href='https://arxiv.org/pdf/2007.07788.pdf'>PDF</a>] [<a href='https://github.com/ZhihuaLiuEd/canetbrats'>Code</a>]<br>
+<ins>**Zhihua Liu**</ins>,Lei Tong, Long Chen, Feixiang Zhou, Zheheng Jiang, Qianni Zhang, Yinhai Wang, Caifeng Shan, Ling Li, Huiyu Zhou<br>
+**TMI**: IEEE Transactions on Medical Imaging.<br>
 
 1. **Perceptual underwater image enhancement with deep learning and physical priors** [<a href='https://arxiv.org/pdf/2008.09697.pdf'>PDF</a>] [<a href='https://github.com/LongChenCV/HybridDetectionGAN'>Code</a>]<br>
 Long Chen, Zheheng Jiang, Lei Tong, <ins>**Zhihua Liu**</ins>, Aite Zhao, Qianni Zhang, Junyu Dong, Huiyu Zhou<br>
-**T-CSVT**: IEEE Transactions on Circuits and Systems for Video Technology.<br>
+**TCSVT**: IEEE Transactions on Circuits and Systems for Video Technology.<br>
