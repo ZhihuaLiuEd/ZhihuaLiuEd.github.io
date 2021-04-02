@@ -38,7 +38,7 @@ Long Chen, <ins>**Zhihua Liu**</ins>, Lei Tong, Zheheng Jiang, Shengke Wang, Jun
 
 ### Journal
 
-1. **CANet: Context Aware Network for 3D Brain Tumor Segmentation** [<a href='https://arxiv.org/pdf/2007.07788.pdf'>PDF</a>] [<a href='https://github.com/ZhihuaLiuEd/canetbrats'>Code</a>]<br>
+1. **CANet: Context Aware Network for Brain Glioma Segmentation** [<a href='https://arxiv.org/pdf/2007.07788.pdf'>PDF</a>] [<a href='https://github.com/ZhihuaLiuEd/canetbrats'>Code</a>]<br>
 <ins>**Zhihua Liu**</ins>,Lei Tong, Long Chen, Feixiang Zhou, Zheheng Jiang, Qianni Zhang, Yinhai Wang, Caifeng Shan, Ling Li, Huiyu Zhou<br>
 **TMI**: IEEE Transactions on Medical Imaging.<br>
 
