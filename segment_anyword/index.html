@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Segment Anyword: a training-free visual concept prompt learning approach for open-set language grounded segmentation using cross-attention maps from a frozen diffusion model.">
+  <meta name="keywords" content="Segment Anyword, image segmentation, open-set segmentation, diffusion models, cross-attention, SAM, ICML 2025">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Segment Anyword: Mask Prompt Inversion for Open-Set Grounded Segmentation</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+
+  <style>
+    /* ---- Venue badge ---- */
+    .venue-badge {
+      display: inline-block;
+      background: #3273dc;
+      color: white !important;
+      padding: 5px 18px;
+      border-radius: 20px;
+      font-size: 1rem;
+      font-weight: bold;
+      letter-spacing: 0.03em;
+    }
+
+    /* ---- Section alternating background ---- */
+    .section-gray { background-color: #f8f8f8; }
+
+    /* ---- Placeholder figures ---- */
+    .placeholder-figure {
+      background: #ebebeb;
+      border: 2px dashed #bbb;
+      border-radius: 10px;
+      min-height: 260px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+    .placeholder-figure .ph-title {
+      font-weight: bold;
+      color: #555;
+      font-size: 1rem;
+      margin-bottom: 0.4rem;
+    }
+    .placeholder-figure .ph-hint {
+      color: #999;
+      font-size: 0.8rem;
+      font-family: monospace;
+    }
+
+    /* ---- Method step cards ---- */
+    @keyframes card-pulse {
+      0%, 100% { box-shadow: 0 4px 18px rgba(50,115,220,0.20); }
+      50%      { box-shadow: 0 6px 26px rgba(50,115,220,0.35); }
+    }
+    .method-step-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.8rem 1.5rem;
+      height: 100%;
+      border-bottom: 3px solid #3273dc;
+      cursor: pointer;
+      transition: box-shadow 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+      position: relative;
+      /* Default: strong blue glow to attract attention */
+      box-shadow: 0 4px 18px rgba(50,115,220,0.22);
+      animation: card-pulse 2.5s ease-in-out infinite;
+    }
+    .method-step-card.has-hovered {
+      animation: none;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+    .method-step-card:hover {
+      animation: none;
+      /* On hover: shift to warm gold/amber glow + deeper shadow + lift */
+      box-shadow: 0 10px 32px rgba(230,126,34,0.30), 0 2px 8px rgba(0,0,0,0.08);
+      transform: translateY(-6px);
+      border-bottom-color: #e67e22;
+    }
+    .step-hover-cta {
+      text-align: center;
+      margin-bottom: 1rem;
+      font-size: 0.88rem;
+      color: #3273dc;
+      font-weight: 500;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+    }
+    .step-hover-cta.is-hidden {
+      opacity: 0;
+    }
+    .step-hover-cta .fa-hand-pointer {
+      margin-right: 0.4rem;
+      animation: cta-bounce 1.5s ease-in-out infinite;
+    }
+    @keyframes cta-bounce {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-3px); }
+    }
+    .step-badge {
+      display: inline-flex;
+      width: 34px;
+      height: 34px;
+      background: #3273dc;
+      color: white;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1rem;
+      margin-bottom: 0.9rem;
+    }
+    .pipeline-container {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 2.5rem;
+    }
+    .pipeline-container img.pipeline-base {
+      width: 100%;
+      border-radius: 10px;
+      display: block;
+    }
+    .pipeline-step-overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border-radius: 10px;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    .pipeline-step-overlay.is-visible {
+      opacity: 1;
+    }
+
+    /* ---- Predicate interactive demo ---- */
+    .pred-case-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .pred-case-tab {
+      padding: 0.6rem 1.6rem;
+      border-radius: 24px;
+      border: 2px solid #3273dc;
+      background: transparent;
+      color: #3273dc;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'Google Sans', sans-serif;
+    }
+    .pred-case-tab:hover {
+      background: rgba(50,115,220,0.08);
+    }
+    .pred-case-tab.is-active {
+      background: #3273dc;
+      color: white;
+    }
+    .pred-demo-panels {
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+    }
+    @media (max-width: 768px) {
+      .pred-demo-panels { flex-direction: column; }
+    }
+    .pred-panel {
+      flex: 1;
+      text-align: center;
+    }
+    .pred-img-container {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #d8d8d8;
+    }
+    .pred-img-container img.pred-base {
+      width: 100%;
+      display: block;
+      border-radius: 10px;
+    }
+    .pred-img-container img.pred-overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    .pred-img-container img.pred-overlay.is-visible {
+      opacity: 0.75;
+    }
+    .pred-panel-label {
+      margin-top: 0.5rem;
+      font-size: 0.82rem;
+      color: #aaa;
+      font-style: italic;
+      min-height: 1.2rem;
+    }
+    .pred-sentence {
+      font-size: 1.15rem;
+      line-height: 2.6;
+      font-family: 'Google Sans', sans-serif;
+      margin-bottom: 0.8rem;
+      text-align: center;
+    }
+    .pred-token {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 14px;
+      border: 2px solid;
+      cursor: pointer;
+      margin: 0 2px;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: all 0.18s ease;
+      user-select: none;
+      background: transparent;
+    }
+    .pred-token:hover {
+      filter: brightness(0.88);
+      transform: translateY(-2px);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+    }
+    .pred-token.is-active {
+      color: white !important;
+      transform: translateY(-2px);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+    }
+    .pred-plain { color: #555; }
+
+    /* ---- Interactive demo ---- */
+    .demo-wrapper {
+      display: flex;
+      gap: 2.5rem;
+      align-items: flex-start;
+    }
+    @media (max-width: 768px) {
+      .demo-wrapper { flex-direction: column; }
+    }
+    .demo-image-side { flex: 1; }
+    .demo-text-side  { flex: 1; }
+
+    .demo-image-container {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #d8d8d8;
+      aspect-ratio: 4 / 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .demo-base-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      color: #777;
+      font-size: 0.9rem;
+      text-align: center;
+      padding: 1rem;
+      position: absolute;
+    }
+    .demo-attn-overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: none;
+      pointer-events: none;
+      border-radius: 10px;
+      transition: opacity 0.25s ease;
+    }
+    .demo-foot-label {
+      margin-top: 0.6rem;
+      font-size: 0.82rem;
+      color: #aaa;
+      text-align: center;
+      font-style: italic;
+      min-height: 1.2rem;
+    }
+
+    /* ---- Token styling ---- */
+    .token-sentence {
+      font-size: 1.3rem;
+      line-height: 2.9;
+      font-family: 'Google Sans', sans-serif;
+      margin-bottom: 1.2rem;
+    }
+    .attn-token {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 16px;
+      border: 2px solid;
+      cursor: pointer;
+      margin: 0 3px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      transition: all 0.18s ease;
+      user-select: none;
+      background: transparent;
+    }
+    .attn-token:hover {
+      filter: brightness(0.88);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.13);
+    }
+    .attn-token.is-active {
+      color: white !important;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .plain-token { color: #555; }
+
+    .demo-instructions {
+      background: #f0f4ff;
+      border-left: 4px solid #3273dc;
+      border-radius: 0 8px 8px 0;
+      padding: 0.9rem 1.1rem;
+      font-size: 0.9rem;
+      color: #444;
+      margin-bottom: 1.4rem;
+      line-height: 1.6;
+    }
+    .demo-instructions strong { color: #3273dc; }
+    .token-active-label {
+      font-size: 0.85rem;
+      color: #888;
+      min-height: 1.4rem;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ========== NAVBAR ========== -->
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://zhihualiued.github.io">
+        <span class="icon"><i class="fas fa-home"></i></span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ========== HERO ========== -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+
+          <h1 class="title is-1 publication-title">
+            Segment Anyword: Mask Prompt Inversion for Open-Set Grounded Segmentation
+          </h1>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://zhihualiued.github.io">Zhihua Liu</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://www.linkedin.com/in/amrutha-saseendran">Amrutha Saseendran</a><sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="https://leitong02.github.io/">Lei Tong</a><sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="https://c0notsilly.github.io/C0.github.io/">Xilin He</a><sup>3</sup>,</span>
+            <span class="author-block">
+              <a href="https://scholar.google.co.uk/citations?user=rF9GU-EAAAAJ&hl=en">Fariba Yousefi</a><sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="https://scholar.google.co.kr/citations?hl=en&user=7h35UZUAAAAJ">Nikolay Burlutskiy</a><sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="https://doglic.bitbucket.io/">Dino Oglic</a><sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="https://tomdiethe.com/">Tom Diethe</a><sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=dIFk1scAAAAJ&hl=en">Philip Teare</a><sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="https://www2.le.ac.uk/departments/informatics/people/huiyu-zhou">Huiyu Zhou</a><sup>1&#8224;</sup>,</span>
+            <span class="author-block">
+              <a href="https://chenjin.netlify.app/">Chen Jin</a><sup>2&#8224;</sup></span>
+          </div>
+
+          <div class="is-size-6 publication-authors" style="margin-top:0.5rem; color:#666;">
+            <span class="author-block"><sup>1</sup>University of Leicester, UK&nbsp;&nbsp;</span>
+            <span class="author-block"><sup>2</sup>AstraZeneca, Cambridge, UK&nbsp;&nbsp;</span>
+            <span class="author-block"><sup>3</sup>Shenzhen University</span>
+          </div>
+          <div class="is-size-7" style="color:#999; margin-top:0.3rem;">
+            <sup>&#8224;</sup>Corresponding Authors
+          </div>
+
+          <div style="margin: 1.4rem 0 0.8rem;">
+            <span class="venue-badge">ICML 2025</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="https://openreview.net/forum?id=9bzgpYtQZn"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                  <span>OpenReview</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2505.17994"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="ai ai-arxiv"></i></span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/ZhihuaLiuEd/Segment-Anyword"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code</span>
+                </a>
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ========== TEASER ========== -->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+
+      <!--
+        PLACEHOLDER: Replace the div below with your teaser figure.
+        <img src="./static/images/teaser.jpg" alt="Teaser" style="width:100%; border-radius:10px;">
+      -->
+      <img src="./static/images/Figure1_large.png" alt="Teaser" style="width:100%; border-radius:10px;">
+      <!--<div class="placeholder-figure" style="min-height:400px;">
+        <span style="font-size:2.5rem; margin-bottom:0.8rem;">🖼️</span>
+        <div class="ph-title">Teaser Figure (Figure 2 from paper)</div>
+        <div class="ph-hint">Replace this div with:<br>&lt;img src="./static/images/teaser.jpg" ...&gt;</div>
+        
+      </div>
+      -->
+
+      <h2 class="subtitle has-text-centered" style="margin-top:1.5rem;">
+        <span class="dnerf">Segment Anyword</span> segments any visual concept described by text —
+        nouns, adjectives, noun phrases, and even predicates — using only a frozen diffusion model,
+        with no training or fine-tuning required.
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+<!-- ========== ABSTRACT ========== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Open-set image segmentation poses a significant challenge because existing methods often demand
+            extensive training or fine-tuning and generally struggle to segment unified objects consistently
+            across diverse text reference expressions. Motivated by this, we propose
+            <b>Segment Anyword</b>, a novel training-free visual concept prompt learning approach for
+            open-set language grounded segmentation that relies on token-level cross-attention maps from
+            a frozen diffusion model to produce segmentation surrogates or <i>mask prompts</i>, which are
+            then refined into targeted object masks.
+          </p>
+          <p>
+            Initial prompts typically lack coherence and consistency as the complexity of the image-text
+            increases, resulting in suboptimal mask fragments. To tackle this issue, we further introduce
+            a novel <b>linguistic-guided visual prompt regularization</b> that binds and clusters visual
+            prompts based on sentence dependency and syntactic structural information, enabling the
+            extraction of robust, noise-tolerant mask prompts and significant improvements in
+            segmentation accuracy.
+          </p>
+          <p>
+            The proposed approach is effective, generalizes across different open-set segmentation tasks,
+            and achieves state-of-the-art results of <b>52.5</b> (+6.8 relative) mIoU on Pascal Context 59,
+            <b>67.73</b> (+25.73 relative) cIoU on gRefCOCO, and <b>67.4</b> (+1.1 relative to fine-tuned
+            methods) mIoU on GranDf — the most complex open-set grounded segmentation benchmark in the field.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ========== METHOD ========== -->
+<section class="section section-gray">
+  <div class="container is-max-desktop">
+
+    <div class="columns is-centered has-text-centered" style="margin-bottom:2rem;">
+      <div class="column">
+        <h2 class="title is-3">Method Overview</h2>
+        <p class="is-size-6 has-text-grey">
+          Segment Anyword operates entirely at test time. No training or fine-tuning is required —
+          fewer than 0.1M parameters are updated per image-text pair.
+        </p>
+      </div>
+    </div>
+
+    <!--
+      PLACEHOLDER: Replace the div below with your pipeline figure.
+      <img src="./static/images/pipeline.jpg" alt="Pipeline" style="width:100%; border-radius:10px; margin-bottom:2.5rem;">
+    -->
+    <div class="pipeline-container" id="pipeline-container">
+      <img class="pipeline-base" src="./static/images/pipeline/pipeline.png" alt="Pipeline">
+      <img class="pipeline-step-overlay" id="step-overlay-1" src="./static/images/pipeline/step1.png" alt="Step 1 detail">
+      <img class="pipeline-step-overlay" id="step-overlay-2" src="./static/images/pipeline/step2.png" alt="Step 2 detail">
+      <img class="pipeline-step-overlay" id="step-overlay-3" src="./static/images/pipeline/step3.png" alt="Step 3 detail">
+    </div>
+    <!--
+    <div class="placeholder-figure" style="min-height:320px; margin-bottom:2.5rem;">
+      <span style="font-size:2.5rem; margin-bottom:0.8rem;">&#9881;&#65039;</span>
+      <div class="ph-title">Pipeline Overview (Figure 4 from paper)</div>
+      <div class="ph-hint">Replace this div with:<br>&lt;img src="./static/images/pipeline.jpg" ...&gt;</div>
+    </div>
+    -->
+
+    <!-- 3-step cards -->
+    <div class="step-hover-cta" id="step-hover-cta">
+      <i class="fas fa-hand-pointer"></i> Hover over each step to highlight it on the pipeline above
+    </div>
+    <div class="columns is-variable is-4">
+      <div class="column">
+        <div class="method-step-card" data-step-num="1">
+          <div class="step-badge">1</div>
+          <h3 class="title is-5">Mask Prompt Inversion</h3>
+          <p class="is-size-6">
+            Given an image and a text description, Segment Anyword optimizes
+            <em>token-level textual embeddings</em> for each visual concept using the frozen
+            diffusion model's image reconstruction objective. Only the text embeddings
+            are updated — the rest of the network remains entirely frozen.
+          </p>
+        </div>
+      </div>
+      <div class="column">
+        <div class="method-step-card" data-step-num="2">
+          <div class="step-badge">2</div>
+          <h3 class="title is-5">Cross-Attention Collection</h3>
+          <p class="is-size-6">
+            Averaged cross-attention maps are collected across all denoising time steps.
+            Each map localizes one word token within the image, serving as a
+            <em>mask prompt surrogate</em> that captures where in the image that concept appears.
+          </p>
+        </div>
+      </div>
+      <div class="column">
+        <div class="method-step-card" data-step-num="3">
+          <div class="step-badge">3</div>
+          <h3 class="title is-5">Linguistic-Guided Regularization</h3>
+          <p class="is-size-6">
+            Sentence dependency and syntax structures guide two regularizations:
+            <em>positive adjective binding</em> (linking modifiers to their nouns) and
+            <em>negative mutual-exclusive binding</em> (separating independent noun phrases).
+            The refined prompts feed into SAM for precise, noise-tolerant mask generation.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ========== INTERACTIVE DEMO ========== -->
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <div class="columns is-centered has-text-centered" style="margin-bottom:2rem;">
+      <div class="column">
+        <h2 class="title is-3">Cross-Attention Visualization</h2>
+        <p class="is-size-6 has-text-grey">
+          Click any highlighted word token to see its cross-attention map overlaid on the image.
+          Each token independently localizes its visual concept.
+        </p>
+      </div>
+    </div>
+
+    <div class="demo-wrapper">
+
+      <!-- LEFT: Image + Overlay -->
+      <div class="demo-image-side">
+        <div class="demo-image-container" id="demo-image-container">
+
+          <!--
+            PLACEHOLDER: Replace with your real input image.
+            File: ./static/images/demo_input.jpg
+            The placeholder disappears automatically when the image loads.
+          -->
+
+          <div class="demo-base-placeholder" id="demo-base-placeholder">
+            <span style="font-size:2rem; display:block; margin-bottom:0.5rem;">&#128444;&#65039;</span>
+            <span style="font-weight:bold;">Input Image</span>
+            <span style="font-size:0.75rem; color:#aaa; margin-top:0.4rem; font-family:monospace;">
+              &#8594;&nbsp;static/images/demo_input.jpg
+            </span>
+          </div>
+
+          <img id="demo-base-image"
+               src="./static/images/cross_attention_boy_case/boy_image.jpg"
+               alt="Demo input: a boy in a blue sweatshirt eating donut"
+               style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:none;"
+               onload="document.getElementById('demo-base-placeholder').style.display='none'; this.style.display='block';">
+
+          <!-- Attention map overlay — toggled by JS -->
+          <div id="demo-attn-overlay" class="demo-attn-overlay"></div>
+        </div>
+
+        <div class="demo-foot-label" id="demo-foot-label">
+          &#8592; Click a word to see its attention map
+        </div>
+      </div>
+
+      <!-- RIGHT: Text Tokens + Instructions -->
+      <div class="demo-text-side">
+
+        <div class="demo-instructions">
+          <strong>How it works:</strong> Segment Anyword learns a visual prompt for each concept word
+          by inverting the image through a frozen diffusion model. The token-level cross-attention map
+          reveals where in the image that concept is located — without any training.
+        </div>
+
+        <div class="token-sentence" id="token-container">
+          <!-- Tokens rendered by JS below -->
+        </div>
+
+        <div class="token-active-label" id="token-active-label">
+          No token selected &mdash; click a colored token above
+        </div>
+
+        <div style="margin-top:1.5rem; border-top:1px solid #eee; padding-top:1rem;">
+          <p class="is-size-7 has-text-grey">
+            <b>Unique capability:</b> Segment Anyword can also segment predicate words such as
+            <em>"holding"</em> or <em>"pulling"</em> — linking subject and object entities through
+            human-object interaction. This goes beyond what all prior segmentation methods can do.
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+    <!--
+      ASSET GUIDE for the interactive demo:
+      ─────────────────────────────────────
+      Place the following files in ./static/images/ :
+
+        demo_input.jpg          ─ The input photo (boy eating a donut)
+        demo_attn_boy.png       ─ Cross-attention heatmap for "boy"
+        demo_attn_blue.png      ─ Cross-attention heatmap for "blue"
+        demo_attn_sweatshirt.png─ Cross-attention heatmap for "sweatshirt"
+        demo_attn_donut.png     ─ Cross-attention heatmap for "donut"
+
+      Heatmaps should be the same resolution as demo_input.jpg, saved as RGBA PNGs
+      with the attention values in the alpha channel (or as a colored overlay on a
+      transparent background). The JS will overlay them at 72% opacity automatically.
+      Until real images are placed, a CSS gradient placeholder is shown instead.
+    -->
+
+  </div>
+</section>
+
+
+<!-- ========== PREDICATE SEGMENTATION ========== -->
+<section class="section section-gray">
+  <div class="container is-max-desktop">
+
+    <div class="columns is-centered has-text-centered" style="margin-bottom:2rem;">
+      <div class="column">
+        <h2 class="title is-3">Beyond Nouns: Predicate Segmentation</h2>
+        <p class="is-size-6 has-text-grey">
+          Most segmentation methods are designed exclusively for nouns and noun phrases.
+          Segment Anyword is the first approach that can also localize abstract predicate words —
+          verbs and gerunds that describe <em>relations</em> between entities.
+        </p>
+      </div>
+    </div>
+
+    <!-- Case selector tabs -->
+    <div class="pred-case-tabs" id="pred-case-tabs">
+      <button class="pred-case-tab is-active" data-pred-case="grasps">grasps</button>
+      <button class="pred-case-tab" data-pred-case="holding">holding</button>
+    </div>
+
+    <!-- Left: input image + attention overlay | Right: vanilla_sam / mask -->
+    <div class="pred-demo-panels">
+      <div class="pred-panel">
+        <div class="pred-img-container" id="pred-left-container">
+          <img class="pred-base" id="pred-left-base" src="" alt="Input image">
+          <img class="pred-overlay" id="pred-left-overlay" src="" alt="Attention overlay">
+        </div>
+        <div class="pred-panel-label" id="pred-left-label">Input image</div>
+      </div>
+      <div class="pred-panel">
+        <div class="pred-img-container" id="pred-right-container">
+          <img class="pred-base" id="pred-right-img" src="" alt="Segmentation mask">
+        </div>
+        <div class="pred-panel-label" id="pred-right-label">Vanilla SAM segmentation</div>
+      </div>
+    </div>
+
+    <!-- Sentence with clickable tokens (below images) -->
+    <div class="pred-sentence" id="pred-sentence" style="margin-top:1.5rem;"></div>
+
+    <div class="columns is-centered" style="margin-top:2rem;">
+      <div class="column is-four-fifths">
+        <div class="notification is-light" style="border-left: 4px solid #3273dc; border-radius: 0 8px 8px 0; background:#f0f4ff;">
+          <p class="is-size-6">
+            <strong>Why this matters:</strong> Predicate words encode the <em>semantic bridge</em> between
+            visual entities. By learning to localize predicates, Segment Anyword can reduce hallucinations
+            in generative models, support relational visual grounding, and enable scientific knowledge
+            discovery from experimental observations or textbook figures — capabilities beyond the reach
+            of any prior segmentation method.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ========== FAILURE CASES ========== -->
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <div class="columns is-centered has-text-centered" style="margin-bottom:2rem;">
+      <div class="column">
+        <h2 class="title is-3">Failure Case Analysis</h2>
+        <p class="is-size-6 has-text-grey">
+          We acknowledge the limitations of Segment Anyword and present representative failure cases
+          to support transparent evaluation.
+        </p>
+      </div>
+    </div>
+
+    <!--
+      PLACEHOLDER: Replace with your failure case figure (Figure 8 from paper).
+      Shows: tiny/thin objects where cross-attention resolution is insufficient.
+      <img src="./static/images/failure_cases.jpg" alt="Failure cases" style="width:100%; border-radius:10px; margin-bottom:1.5rem;">
+    -->
+    <img src="./static/images/failure_cases.png" alt="Failure cases" style="width:100%; border-radius:10px; margin-bottom:1.5rem;">
+    <!--<div class="placeholder-figure" style="min-height:280px; margin-bottom:1.5rem;">
+      <span style="font-size:2rem; margin-bottom:0.6rem;">&#x26A0;&#xFE0F;</span>
+      <div class="ph-title">Failure Cases (Figure 8 from paper)</div>
+      <div class="ph-hint">→ static/images/failure_cases.jpg</div>
+    </div>-->
+
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          <p>
+            Segment Anyword inherits a resolution constraint from the cross-attention mechanism of the
+            underlying diffusion model: attention maps are computed at a fixed spatial resolution of
+            <strong>16&times;16</strong> before upsampling. This limited resolution means that
+            <strong>very small or structurally thin objects</strong> — such as scissors blades,
+            wire-like structures, or objects occupying only a handful of pixels — cannot be precisely
+            localized by the attention map alone.
+          </p>
+          <p>
+            When the target concept is tiny, the low-resolution attention map may activate over a
+            broader, semantically related region rather than the exact object boundary. This leads to
+            <em>false positive prompt regions</em> being passed to SAM, causing the final mask to
+            spill into nearby areas or fail to isolate the intended object.
+          </p>
+          <p>
+            Addressing this limitation through a higher-resolution backbone or a hierarchical
+            attention aggregation strategy is a promising direction for future work.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ========== BIBTEX ========== -->
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@inproceedings{liu2025segmentanyword,
+  author    = {Liu, Zhihua and Saseendran, Amrutha and Tong, Lei and He, Xilin and
+               Yousefi, Fariba and Burlutskiy, Nikolay and Oglic, Dino and Diethe, Tom
+               and Teare, Philip and Zhou, Huiyu and Jin, Chen},
+  title     = {Segment Anyword: Mask Prompt Inversion for Open-Set Grounded Segmentation},
+  booktitle = {Proceedings of the 42nd International Conference on Machine Learning},
+  year      = {2025},
+}</code></pre>
+  </div>
+</section>
+
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link" href="https://arxiv.org/pdf/2505.17994">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://github.com/ZhihuaLiuEd/Segment-Anyword">
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content has-text-centered">
+          <p>
+            This page is built on the
+            <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a> template,
+            licensed under a
+            <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+              Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ========== INTERACTIVE DEMO SCRIPT ========== -->
+<script>
+(function () {
+  'use strict';
+
+  // ---------------------------------------------------------------------------
+  // Token definitions for "A boy in a blue sweatshirt eating donut"
+  // ---------------------------------------------------------------------------
+  var TOKENS = [
+    { text: 'A',           clickable: false },
+    { text: 'boy',         clickable: true, color: '#e74c3c', gradient: '72% 38%',
+      attn: './static/images/cross_attention_boy_case/demo_attn_boy.png' },
+    { text: 'in',          clickable: false },
+    { text: 'a',           clickable: false },
+    { text: 'blue',        clickable: true, color: '#3498db', gradient: '54% 56%',
+      attn: './static/images/cross_attention_boy_case/demo_attn_blue.png' },
+    { text: 'sweatshirt',  clickable: true, color: '#2471a3', gradient: '50% 62%',
+      attn: './static/images/cross_attention_boy_case/demo_attn_sweatshirt.png' },
+    { text: 'eating',      clickable: false },
+    { text: 'donut',       clickable: true, color: '#e67e22', gradient: '68% 72%',
+      attn: './static/images/cross_attention_boy_case/demo_attn_donut.png' },
+  ];
+
+  // ---------------------------------------------------------------------------
+  // Render tokens into #token-container
+  // ---------------------------------------------------------------------------
+  var container = document.getElementById('token-container');
+
+  TOKENS.forEach(function (token) {
+    var span = document.createElement('span');
+    if (token.clickable) {
+      span.className = 'attn-token';
+      span.textContent = token.text;
+      span.style.borderColor = token.color;
+      span.style.color = token.color;
+      span.dataset.color    = token.color;
+      span.dataset.attn     = token.attn;
+      span.dataset.gradient = token.gradient;
+      span.addEventListener('click', function () { handleTokenClick(this); });
+    } else {
+      span.className = 'plain-token';
+      span.textContent = '\u00a0' + token.text + '\u00a0';
+    }
+    container.appendChild(span);
+  });
+
+  // ---------------------------------------------------------------------------
+  // Token click handler
+  // ---------------------------------------------------------------------------
+  var activeToken = null;
+
+  function handleTokenClick(el) {
+    var overlay   = document.getElementById('demo-attn-overlay');
+    var footLabel = document.getElementById('demo-foot-label');
+    var activeLabel = document.getElementById('token-active-label');
+
+    // Clicking the same token again → deselect
+    if (activeToken === el) {
+      deselect(el, overlay, footLabel, activeLabel);
+      return;
+    }
+
+    // Deselect previous
+    if (activeToken) {
+      activeToken.classList.remove('is-active');
+      activeToken.style.backgroundColor = 'transparent';
+      activeToken.style.color = activeToken.dataset.color;
+    }
+
+    // Activate new token
+    el.classList.add('is-active');
+    el.style.backgroundColor = el.dataset.color;
+    el.style.color = 'white';
+    activeToken = el;
+    activeLabel.textContent = 'Showing attention map for: \u201c' + el.textContent + '\u201d';
+    footLabel.textContent = 'Cross-attention map \u2192 \u201c' + el.textContent + '\u201d';
+
+    showAttentionMap(el.dataset.attn, el.dataset.gradient, el.dataset.color, overlay);
+  }
+
+  function deselect(el, overlay, footLabel, activeLabel) {
+    el.classList.remove('is-active');
+    el.style.backgroundColor = 'transparent';
+    el.style.color = el.dataset.color;
+    overlay.style.display = 'none';
+    activeLabel.textContent = 'No token selected \u2014 click a colored token above';
+    footLabel.textContent = '\u2190 Click a word to see its attention map';
+    activeToken = null;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Show attention map: try real PNG, fall back to CSS gradient
+  // ---------------------------------------------------------------------------
+  function showAttentionMap(src, gradient, color, overlay) {
+    var img = new Image();
+
+    img.onload = function () {
+      overlay.style.backgroundImage = 'url(' + src + ')';
+      overlay.style.backgroundSize = 'cover';
+      overlay.style.backgroundPosition = 'center';
+      overlay.style.opacity = '0.72';
+      overlay.style.display = 'block';
+    };
+
+    img.onerror = function () {
+      // CSS radial-gradient fallback simulating an attention heatmap
+      var parts = gradient.split(' ');
+      var cx = parts[0], cy = parts[1];
+      overlay.style.backgroundImage =
+        'radial-gradient(ellipse 48% 42% at ' + cx + ' ' + cy + ', ' +
+        color + 'cc 0%, ' +
+        color + '77 30%, ' +
+        color + '33 55%, transparent 75%)';
+      overlay.style.backgroundSize = '';
+      overlay.style.backgroundPosition = '';
+      overlay.style.opacity = '1';
+      overlay.style.display = 'block';
+    };
+
+    img.src = src;
+  }
+
+})();
+</script>
+
+<!-- ========== STEP CARD HOVER OVERLAY SCRIPT ========== -->
+<script>
+(function () {
+  'use strict';
+
+  var overlays = {
+    1: document.getElementById('step-overlay-1'),
+    2: document.getElementById('step-overlay-2'),
+    3: document.getElementById('step-overlay-3')
+  };
+
+  var cta = document.getElementById('step-hover-cta');
+  var cards = document.querySelectorAll('.method-step-card[data-step-num]');
+  var hasHovered = false;
+
+  cards.forEach(function (card) {
+    card.addEventListener('mouseenter', function () {
+      var num = card.getAttribute('data-step-num');
+      if (overlays[num]) overlays[num].classList.add('is-visible');
+      // After first hover, fade out CTA and stop pulse on all cards
+      if (!hasHovered) {
+        hasHovered = true;
+        cta.classList.add('is-hidden');
+        cards.forEach(function (c) { c.classList.add('has-hovered'); });
+      }
+    });
+    card.addEventListener('mouseleave', function () {
+      var num = card.getAttribute('data-step-num');
+      if (overlays[num]) overlays[num].classList.remove('is-visible');
+    });
+  });
+})();
+</script>
+
+<!-- ========== PREDICATE DEMO SCRIPT ========== -->
+<script>
+(function () {
+  'use strict';
+
+  var NOUN_COLOR = '#333';
+  var PREDICATE_COLOR = '#8e44ad';
+
+  var PRED_CASES = {
+    grasps: {
+      base: './static/images/predicate_grasps/',
+      sentence: [
+        { text: 'a', clickable: false },
+        { text: 'man', clickable: true, color: NOUN_COLOR, word: 'man' },
+        { text: 'with a blue shirt and brown hair', clickable: false },
+        { text: 'grasps', clickable: true, color: PREDICATE_COLOR, word: 'grasps', predicate: true },
+        { text: 'a', clickable: false },
+        { text: 'banana', clickable: true, color: NOUN_COLOR, word: 'banana' },
+        { text: 'on his head', clickable: false }
+      ]
+    },
+    holding: {
+      base: './static/images/predicate_holding/',
+      sentence: [
+        { text: 'A', clickable: false },
+        { text: 'man', clickable: true, color: NOUN_COLOR, word: 'man' },
+        { text: 'is', clickable: false },
+        { text: 'holding', clickable: true, color: PREDICATE_COLOR, word: 'holding', predicate: true },
+        { text: 'a', clickable: false },
+        { text: 'racket', clickable: true, color: NOUN_COLOR, word: 'racket' },
+        { text: 'on a tennis court', clickable: false }
+      ]
+    }
+  };
+
+  var currentCase = 'grasps';
+  var activeToken = null;
+
+  var sentenceEl = document.getElementById('pred-sentence');
+  var leftBase = document.getElementById('pred-left-base');
+  var leftOverlay = document.getElementById('pred-left-overlay');
+  var rightImg = document.getElementById('pred-right-img');
+  var leftLabel = document.getElementById('pred-left-label');
+  var rightLabel = document.getElementById('pred-right-label');
+
+  function loadCase(caseName) {
+    currentCase = caseName;
+    activeToken = null;
+    var c = PRED_CASES[caseName];
+
+    // Update tabs
+    document.querySelectorAll('.pred-case-tab').forEach(function (tab) {
+      tab.classList.toggle('is-active', tab.dataset.predCase === caseName);
+    });
+
+    // Set images to default
+    leftBase.src = c.base + 'img.png';
+    leftOverlay.classList.remove('is-visible');
+    leftOverlay.src = '';
+    rightImg.src = c.base + 'vanilla_sam.png';
+    leftLabel.textContent = 'Input image';
+    rightLabel.textContent = 'Vanilla SAM segmentation';
+
+    // Render sentence tokens
+    sentenceEl.innerHTML = '';
+    c.sentence.forEach(function (tok) {
+      var span = document.createElement('span');
+      if (tok.clickable) {
+        span.className = 'pred-token';
+        span.textContent = tok.text;
+        span.style.borderColor = tok.color;
+        span.style.color = tok.color;
+        span.dataset.color = tok.color;
+        span.dataset.word = tok.word;
+        span.addEventListener('click', function () { handlePredTokenClick(this); });
+      } else {
+        span.className = 'pred-plain';
+        span.textContent = '\u00a0' + tok.text + '\u00a0';
+      }
+      sentenceEl.appendChild(span);
+    });
+  }
+
+  function handlePredTokenClick(el) {
+    var c = PRED_CASES[currentCase];
+    var word = el.dataset.word;
+
+    // Clicking same token again → deselect
+    if (activeToken === el) {
+      activeToken.classList.remove('is-active');
+      activeToken.style.backgroundColor = 'transparent';
+      activeToken.style.color = activeToken.dataset.color;
+      activeToken = null;
+      leftOverlay.classList.remove('is-visible');
+      rightImg.src = c.base + 'vanilla_sam.png';
+      leftLabel.textContent = 'Input image';
+      rightLabel.textContent = 'Vanilla SAM segmentation';
+      return;
+    }
+
+    // Deselect previous
+    if (activeToken) {
+      activeToken.classList.remove('is-active');
+      activeToken.style.backgroundColor = 'transparent';
+      activeToken.style.color = activeToken.dataset.color;
+    }
+
+    // Activate new token
+    el.classList.add('is-active');
+    el.style.backgroundColor = el.dataset.color;
+    el.style.color = 'white';
+    activeToken = el;
+
+    // Update left: attention overlay on input image
+    leftOverlay.src = c.base + 'attn_' + word + '.png';
+    leftOverlay.classList.add('is-visible');
+    leftLabel.textContent = 'Attention map: \u201c' + word + '\u201d';
+
+    // Update right: mask image
+    rightImg.src = c.base + 'mask_' + word + '.png';
+    rightLabel.textContent = 'Segmentation mask: \u201c' + word + '\u201d';
+  }
+
+  // Tab click handlers
+  document.querySelectorAll('.pred-case-tab').forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      loadCase(tab.dataset.predCase);
+    });
+  });
+
+  // Initialize with first case
+  loadCase('grasps');
+})();
+</script>
+
+</body>
+</html>
