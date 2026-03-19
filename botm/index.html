@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Primary Meta Tags -->
+  <meta name="title" content="BOTM: Echocardiography Segmentation via Bi-directional Optimal Token Matching">
+  <meta name="description" content="We propose BOTM, a novel token matching framework for echocardiography segmentation that enforces anatomical consistency via optimal transport, achieving state-of-the-art results on CAMUS and TED.">
+  <meta name="keywords" content="echocardiography segmentation, optimal transport, token matching, anatomical consistency, medical image segmentation, BMVC 2025">
+  <meta name="author" content="Zhihua Liu, Lei Tong, Xilin He, Che Liu, Rossella Arcucci, Chen Jin, Huiyu Zhou">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="University of Leicester">
+  <meta property="og:title" content="BOTM: Echocardiography Segmentation via Bi-directional Optimal Token Matching">
+  <meta property="og:description" content="A novel token matching framework for echocardiography segmentation that enforces anatomical consistency via optimal transport.">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2025-01-01T00:00:00.000Z">
+  <meta property="article:author" content="Zhihua Liu">
+  <meta property="article:section" content="Research">
+  <meta property="article:tag" content="echocardiography">
+  <meta property="article:tag" content="segmentation">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="BOTM: Echocardiography Segmentation via Bi-directional Optimal Token Matching">
+  <meta name="twitter:description" content="A novel token matching framework for echocardiography segmentation that enforces anatomical consistency via optimal transport.">
+
+  <!-- Academic/Research Specific -->
+  <meta name="citation_title" content="BOTM: Echocardiography Segmentation via Bi-directional Optimal Token Matching">
+  <meta name="citation_author" content="Liu, Zhihua">
+  <meta name="citation_author" content="Tong, Lei">
+  <meta name="citation_author" content="He, Xilin">
+  <meta name="citation_author" content="Liu, Che">
+  <meta name="citation_author" content="Arcucci, Rossella">
+  <meta name="citation_author" content="Jin, Chen">
+  <meta name="citation_author" content="Zhou, Huiyu">
+  <meta name="citation_publication_date" content="2025">
+  <meta name="citation_conference_title" content="British Machine Vision Conference (BMVC)">
+
+  <!-- Additional SEO -->
+  <meta name="theme-color" content="#2563eb">
+  <meta name="msapplication-TileColor" content="#2563eb">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+  <title>BOTM: Echocardiography Segmentation via Bi-directional Optimal Token Matching | BMVC 2025</title>
+
+  <!-- Favicon and App Icons -->
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+  <link rel="apple-touch-icon" href="static/images/favicon.ico">
+
+  <!-- Critical CSS -->
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <!-- Non-critical CSS -->
+  <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+  <noscript>
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  </noscript>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Defer non-critical JavaScript -->
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/js/index.js"></script>
+
+  <!-- Structured Data for Academic Papers -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "headline": "BOTM: Echocardiography Segmentation via Bi-directional Optimal Token Matching",
+    "description": "A novel token matching framework for echocardiography segmentation that enforces anatomical consistency via optimal transport.",
+    "author": [
+      {"@type": "Person", "name": "Zhihua Liu", "affiliation": {"@type": "Organization", "name": "University of Leicester"}},
+      {"@type": "Person", "name": "Lei Tong", "affiliation": {"@type": "Organization", "name": "AstraZeneca"}},
+      {"@type": "Person", "name": "Xilin He", "affiliation": {"@type": "Organization", "name": "The Chinese University of Hong Kong"}},
+      {"@type": "Person", "name": "Che Liu", "affiliation": {"@type": "Organization", "name": "Imperial College London"}},
+      {"@type": "Person", "name": "Rossella Arcucci", "affiliation": {"@type": "Organization", "name": "Imperial College London"}},
+      {"@type": "Person", "name": "Chen Jin", "affiliation": {"@type": "Organization", "name": "AstraZeneca"}},
+      {"@type": "Person", "name": "Huiyu Zhou", "affiliation": {"@type": "Organization", "name": "University of Leicester"}}
+    ],
+    "datePublished": "2025",
+    "publisher": {"@type": "Organization", "name": "British Machine Vision Conference"},
+    "keywords": ["echocardiography", "segmentation", "optimal transport", "token matching", "anatomical consistency"],
+    "isAccessibleForFree": true
+  }
+  </script>
+</head>
+<body>
+
+  <!-- Scroll to Top Button -->
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <main id="main-content">
+
+  <!-- Hero: Title, Authors, Links -->
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title"><span class="acr">BOTM</span>: Echocardiography Segmentation<br><span class="title-line-2">via <span class="acr">B</span>i-directional <span class="acr">O</span>ptimal <span class="acr">T</span>oken <span class="acr">M</span>atching</span></h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://zhihualiu.com" target="_blank">Zhihua Liu</a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="#" target="_blank">Lei Tong</a><sup>2</sup>,</span>
+              <span class="author-block">
+                <a href="#" target="_blank">Xilin He</a><sup>3</sup>,</span>
+              <span class="author-block">
+                <a href="#" target="_blank">Che Liu</a><sup>4</sup>,</span>
+              <span class="author-block">
+                <a href="#" target="_blank">Rossella Arcucci</a><sup>4</sup>,</span>
+              <span class="author-block">
+                <a href="#" target="_blank">Chen Jin</a><sup>2</sup>,</span>
+              <span class="author-block">
+                <a href="#" target="_blank">Huiyu Zhou</a><sup>1,*</sup></span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>1</sup>University of Leicester &nbsp; <sup>2</sup>AstraZeneca &nbsp; <sup>3</sup>CUHK &nbsp; <sup>4</sup>Imperial College London</span>
+              <br>
+              <span class="author-block">British Machine Vision Conference (BMVC) 2025</span>
+              <span class="eql-cntrb"><small><br><sup>*</sup>Corresponding author</small></span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="https://bmva-archive.org.uk/bmvc/2025/assets/papers/Paper_121/paper.pdf" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                  <span>Paper</span>
+                  </a>
+                </span>
+
+                <span class="link-block">
+                  <a href="static/pdfs/supplementary_material.pdf" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                  <span>Supplementary</span>
+                  </a>
+                </span>
+
+                <span class="link-block">
+                  <a href="https://github.com/ZhihuaLiuEd/BOTM" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code</span>
+                  </a>
+                </span>
+
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2505.18052" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="ai ai-arxiv"></i></span>
+                  <span>arXiv</span>
+                  </a>
+                </span>
+
+                <span class="link-block">
+                  <a href="https://zhihualiued.github.io/posters/Zhihua%20Liu%20BOTM.pdf" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-image"></i></span>
+                  <span>Poster</span>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Teaser Image -->
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <img src="static/images/Fig1.png" alt="BOTM teaser: echocardiography segmentation with anatomical consistency" class="teaser-image" loading="eager">
+        <h2 class="subtitle has-text-centered">
+          BOTM performs echocardiography segmentation and optimal anatomy transportation simultaneously, achieving accurate and anatomically consistent segmentation across challenging echocardiographic sequences.
+        </h2>
+      </div>
+    </div>
+  </section>
+
+  <!-- Abstract -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              Existing echocardiography segmentation methods often suffer from anatomical inconsistency challenges caused by shape variation, partial observation and region ambiguity with similar intensity across 2D echocardiographic sequences, resulting in false positive segmentation with anatomical defeated structures in challenging low signal-to-noise ratio conditions. To provide a strong anatomical guarantee across different echocardiographic frames, we propose a novel segmentation framework named <strong>BOTM</strong> (Bi-directional Optimal Token Matching) that performs echocardiography segmentation and optimal anatomy transportation simultaneously. Given paired echocardiographic images, BOTM learns to match two sets of discrete image tokens by finding optimal correspondences from a novel anatomical transportation perspective. We further extend the token matching into a bi-directional cross-transport attention proxy to regulate the preserved anatomical consistency within the cardiac cyclic deformation in temporal domain. Extensive experimental results show that BOTM can generate stable and accurate segmentation outcomes (e.g. &minus;1.917 HD on CAMUS 2H LV, +1.9% Dice on TED), and provide a better matching interpretation with anatomical consistency guarantee.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Method -->
+  <section class="section" id="method">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Method</h2>
+
+      <!-- Pipeline Overview Image with highlight overlays -->
+      <div class="pipeline-container">
+        <img src="static/images/pipeline/pipeline.png" alt="BOTM pipeline overview" class="pipeline-image" loading="lazy">
+        <!-- Highlight overlays — adjust positions when final image is ready -->
+        <div class="pipeline-highlight" id="highlight-step1"></div>
+        <div class="pipeline-highlight" id="highlight-step2"></div>
+        <div class="pipeline-highlight" id="highlight-step3"></div>
+      </div>
+
+      <!-- Three Method Cards -->
+      <div class="columns is-centered method-cards">
+        <div class="column is-one-third">
+          <div class="method-card" data-step="1">
+            <div class="method-card-inner">
+              <div class="method-card-front">
+                <div class="method-step-number">Step 1</div>
+                <h3 class="method-card-title">Optimal Token Matching</h3>
+                <p class="method-card-summary">Finding optimal correspondences between token embeddings via Sinkhorn iterations.</p>
+              </div>
+              <div class="method-card-back">
+                <img src="static/images/pipeline/step1.png" alt="Step 1: Optimal Token Matching via Sinkhorn" loading="lazy">
+                <p>Given paired echocardiographic images, we compute a cost matrix from token cosine similarity and solve the optimal transport problem using entropy-regularized Sinkhorn iterations to obtain the matching score map.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="column is-one-third">
+          <div class="method-card" data-step="2">
+            <div class="method-card-inner">
+              <div class="method-card-front">
+                <div class="method-step-number">Step 2</div>
+                <h3 class="method-card-title">Cross-Transport Attention</h3>
+                <p class="method-card-summary">Bi-directional attention proxy guided by the optimal transport plan.</p>
+              </div>
+              <div class="method-card-back">
+                <img src="static/images/pipeline/step2.png" alt="Step 2: Bi-directional Cross-Transport Attention" loading="lazy">
+                <p>We reformulate optimal token matching as a novel Bi-directional Cross-Transport Attention (BCTA) proxy, computing barycentric interpolated embeddings in both forward and backward directions.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="column is-one-third">
+          <div class="method-card" data-step="3">
+            <div class="method-card-inner">
+              <div class="method-card-front">
+                <div class="method-step-number">Step 3</div>
+                <h3 class="method-card-title">Anatomical Importance</h3>
+                <p class="method-card-summary">Learnable mask to suppress low-relevance background regions.</p>
+              </div>
+              <div class="method-card-back">
+                <img src="static/images/pipeline/step3.png" alt="Step 3: Anatomical Importance Masking" loading="lazy">
+                <p>A learnable anatomical importance mask combines local saliency and global distribution maps to suppress regions with high matching probability but low anatomical relevance, such as background areas.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Performance: 2D Dataset Visualizations -->
+  <section class="section hero is-light" id="performance">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Performance</h2>
+
+      <!-- Dataset Tabs -->
+      <div class="dataset-tabs has-text-centered">
+        <button class="dataset-tab active" data-dataset="CAMUS 2CH" onclick="switchDataset('camus')">CAMUS 2CH</button>
+        <button class="dataset-tab" data-dataset="CAMUS 4CH" onclick="switchDataset('ted')">CAMUS 4CH</button>
+      </div>
+
+      <!-- Dataset Visualizations -->
+      <div class="dataset-content" id="dataset-camus">
+        <img src="static/images/results_2d/CAMUS2CH.png" alt="Segmentation visualization on CAMUS dataset in 2 chamber view" loading="lazy">
+      </div>
+      <div class="dataset-content" id="dataset-ted" style="display: none;">
+        <img src="static/images/results_2d/CAMUS4CH.png" alt="Segmentation visualization on CAMUS dataset in 4 chamber" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  <!-- Video Segmentation Examples -->
+  <section class="section" id="video-results">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Video Segmentation</h2>
+      <p class="has-text-centered video-section-desc">
+        BOTM produces accurate, stable, and temporally consistent segmentation across extended frame sequences.
+      </p>
+
+      <!-- Video Carousel with Arrows -->
+      <div class="video-carousel-container">
+        <button class="video-nav-arrow video-nav-prev" onclick="switchVideo(-1)" aria-label="Previous video">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+
+        <div class="video-carousel-viewport">
+          <div class="video-slide active" data-index="0">
+            <video autoplay muted loop playsinline preload="auto">
+              <source src="static/videos/results_ted/video_patient3.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="video-slide" data-index="1">
+            <video autoplay muted loop playsinline preload="metadata">
+              <source src="static/videos/results_ted/video_patient8.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="video-slide" data-index="2">
+            <video autoplay muted loop playsinline preload="metadata">
+              <source src="static/videos/results_ted/video_patient11.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="video-slide" data-index="3">
+            <video autoplay muted loop playsinline preload="metadata">
+              <source src="static/videos/results_ted/video_patient13.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="video-slide" data-index="4">
+            <video autoplay muted loop playsinline preload="metadata">
+              <source src="static/videos/results_ted/video_patient18.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+
+        <button class="video-nav-arrow video-nav-next" onclick="switchVideo(1)" aria-label="Next video">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+
+      <!-- Video Indicator Dots -->
+      <div class="video-indicators has-text-centered">
+        <span class="video-dot active" data-index="0" onclick="goToVideo(0)"></span>
+        <span class="video-dot" data-index="1" onclick="goToVideo(1)"></span>
+        <span class="video-dot" data-index="2" onclick="goToVideo(2)"></span>
+        <span class="video-dot" data-index="3" onclick="goToVideo(3)"></span>
+        <span class="video-dot" data-index="4" onclick="goToVideo(4)"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Uncertainty Reduction -->
+  <section class="section hero is-light" id="uncertainty">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Segmentation Uncertainty</h2>
+      <p class="has-text-centered uncertainty-desc">
+        By incorporating token matching to enforce anatomical consistency, BOTM effectively reduces segmentation uncertainty, leading to more coherent and reliable mask boundary delineation.
+      </p>
+      <div class="uncertainty-image-container">
+        <img src="static/images/uncertainty/Uncertainty.png" alt="Segmentation uncertainty comparison showing BOTM reduces uncertainty" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  <!-- BibTeX -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <div class="bibtex-header">
+        <h2 class="title">BibTeX</h2>
+        <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+          <i class="fas fa-copy"></i>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre id="bibtex-code"><code>@inproceedings{liu2025botm,
+  title={BOTM: Echocardiography Segmentation via Bi-directional Optimal Token Matching},
+  author={Liu, Zhihua and Tong, Lei and He, Xilin and Liu, Che and Arcucci, Rossella and Jin, Chen and Zhou, Huiyu},
+  booktitle={British Machine Vision Conference (BMVC)},
+  year={2025}
+}</code></pre>
+    </div>
+  </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+              You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  </body>
+</html>
