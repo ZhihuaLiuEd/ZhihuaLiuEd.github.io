@@ -52,13 +52,48 @@
     .more-works-item:last-child {
       border-bottom: none;
     }
-    .more-works-thumb {
+    .more-works-thumb-link {
       flex: 0 0 140px;
       width: 140px;
       height: 100px;
+      border-radius: 8px;
+      overflow: hidden;
+      display: block;
+      position: relative;
+      background: #f5f5f5;
+      text-decoration: none;
+      cursor: zoom-in;
+    }
+    .more-works-thumb-link::after {
+      content: '\f00e';                 /* fa-search-plus */
+      font-family: 'Font Awesome 5 Free';
+      font-weight: 900;
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      color: white;
+      background: rgba(50, 115, 220, 0.0);
+      border-radius: 8px;
+      opacity: 0;
+      transition: opacity 0.22s ease, background 0.22s ease;
+    }
+    .more-works-thumb-link:hover::after {
+      opacity: 1;
+      background: rgba(50, 115, 220, 0.42);
+    }
+    .more-works-thumb-link:hover .more-works-thumb {
+      transform: scale(1.06);
+    }
+    .more-works-thumb {
+      width: 100%;
+      height: 100%;
       object-fit: contain;
       border-radius: 8px;
-      background: #f5f5f5;
+      display: block;
+      transition: transform 0.22s ease;
     }
     .more-works-thumb-placeholder {
       flex: 0 0 140px;
@@ -93,7 +128,7 @@
     }
     @media (max-width: 600px) {
       .more-works-item { flex-direction: column; }
-      .more-works-thumb, .more-works-thumb-placeholder { width: 100%; flex: none; }
+      .more-works-thumb-link, .more-works-thumb-placeholder { width: 100%; flex: none; height: 160px; }
     }
 
     /* ---- BibTeX copy button ---- */
@@ -930,7 +965,9 @@
 
     <!-- Work 1 -->
     <div class="more-works-item">
-      <img class="more-works-thumb" src="./static/images/Thumbnail_MCPL.png" alt="MCPL thumbnail">
+      <a class="more-works-thumb-link" href="./static/images/Thumbnail_MCPL.png" target="_blank" rel="noopener" title="View full image">
+        <img class="more-works-thumb" src="./static/images/Thumbnail_MCPL.png" alt="MCPL thumbnail">
+      </a>
       <div class="more-works-body">
         <a href="https://astrazeneca.github.io/mcpl.github.io" class="more-works-title">An Image is Worth Multiple Words: Discovering Object Level Concepts using Multi-Concept Prompt Learning (ICML 2024)</a>
         <p class="more-works-desc">
@@ -941,7 +978,9 @@
 
     <!-- Work 2 -->
     <div class="more-works-item">
-      <img class="more-works-thumb" src="./static/images/Thumbnail_SegmentAnyword.png" alt="Segment Anyword thumbnail">
+      <a class="more-works-thumb-link" href="./static/images/Thumbnail_SegmentAnyword.png" target="_blank" rel="noopener" title="View full image">
+        <img class="more-works-thumb" src="./static/images/Thumbnail_SegmentAnyword.png" alt="Segment Anyword thumbnail">
+      </a>
       <div class="more-works-body">
         <a href="https://zhihualiued.github.io/segment_anyword/" class="more-works-title">Segment anyword: Mask prompt inversion for open-set grounded segmentation (ICML 2025)</a>
         <p class="more-works-desc">
@@ -952,7 +991,9 @@
 
     <!-- Work 3 -->
     <div class="more-works-item">
-      <img class="more-works-thumb" src="./static/images/Thumbnail_Lavender.jpg" alt="Lavender thumbnail">
+      <a class="more-works-thumb-link" href="./static/images/Thumbnail_Lavender.jpg" target="_blank" rel="noopener" title="View full image">
+        <img class="more-works-thumb" src="./static/images/Thumbnail_Lavender.jpg" alt="Lavender thumbnail">
+      </a>
       <div class="more-works-body">
         <a href="https://astrazeneca.github.io/vlm/" class="more-works-title">Lavender: Diffusion Instruction Tuning (ICML 2025)</a>
         <p class="more-works-desc">
@@ -963,7 +1004,9 @@
 
     <!-- Work 4 -->
     <div class="more-works-item">
-      <img class="more-works-thumb" src="./static/images/Thumbnail_CausalAdapter.png" alt="Causal-Adapter thumbnail">
+      <a class="more-works-thumb-link" href="./static/images/Thumbnail_CausalAdapter.png" target="_blank" rel="noopener" title="View full image">
+        <img class="more-works-thumb" src="./static/images/Thumbnail_CausalAdapter.png" alt="Causal-Adapter thumbnail">
+      </a>
       <div class="more-works-body">
         <a href="https://leitong02.github.io/causaladapter/" class="more-works-title">Causal-Adapter: Taming Text-to-Image Diffusion for Faithful Counterfactual Generation (ArXiv 2025)</a>
         <p class="more-works-desc">
